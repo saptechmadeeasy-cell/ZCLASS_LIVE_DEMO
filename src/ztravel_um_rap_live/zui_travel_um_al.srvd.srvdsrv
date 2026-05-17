@@ -1,0 +1,6 @@
+@EndUserText.label: 'ZUI_TRAVEL_UM_AL'
+define service ZUI_TRAVEL_UM_AL {
+  expose ZC_TRAVEL_UM_AL;
+  expose ZC_BOOKING_UM_AL;
+  expose ZC_BOOKSUPPL_UM_AL;
+}

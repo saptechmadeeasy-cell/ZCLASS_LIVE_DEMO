@@ -1,0 +1,4 @@
+@EndUserText.label: 'service def'
+define service Zce_agency_sd {
+  expose ZCE_AGENCY_REVIEW;
+}

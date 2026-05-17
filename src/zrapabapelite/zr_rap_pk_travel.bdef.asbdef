@@ -1,0 +1,107 @@
+managed implementation in class ZBP_R_RAP_PK_TRAVEL unique;
+strict ( 2 );
+with draft;
+extensible;
+define behavior for ZR_RAP_PK_TRAVEL //alias ZrRapPkTravel
+//persistent table zrap_pk_travel
+extensible
+draft table zrap_pk_travel_d
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+early numbering //very first step
+//with additional save
+with unmanaged save
+{
+
+
+
+  field ( readonly )
+  CreatedBy,
+  CreatedAt,
+  LocalLastChangedBy,
+  LocalLastChangedAt,
+  LastChangedAt;
+
+  field ( readonly : update )
+  TravelID;
+
+  field( readonly )
+  travel_uuid;
+
+  field( features: instance ) CustomerID;
+
+
+  create;
+  update( features: instance );
+  delete( features: instance );
+  action( features: instance )  applyDiscount result [1] $self;
+
+  determination determineDefaultStatus on modify { create; }
+
+  validation ValidateCustomer on save { create; field CustomerID ; }
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action( features: instance ) Edit;
+  draft action Resume;
+//// Inside your Travel entity definition
+//function //(authorization:none)
+// CheckTravelValidity result [1] $self;
+
+
+
+// In ZC_RAP_PK_TRAVEL
+
+  action( features: instance ) applyDiscountwithp parameter ZABS_ENTITY_LIVE_DEMO result [1] $self;
+    factory  action copyAndCreate [1];
+
+
+//function GetDiscountedPrice parameter  ZABS_ENTITY_LIVE_DEMO  result [1] $self;
+
+function(  features: instance  ) GetDiscountedPrice parameter  ZABS_ENTITY_LIVE_DEMO  result [1] ZABS_ENT_RESULT ;
+
+static function( authorization : none )  CalculateAveragePrice result [1] $self ;
+
+
+
+
+
+  draft determine action Prepare{ validation ValidateCustomer; }
+
+  mapping for zrap_pk_travel corresponding extensible
+    {
+      TravelID           = TRAVEL_ID;
+      AgencyID           = AGENCY_ID;
+      CustomerID         = CUSTOMER_ID;
+      BeginDate          = BEGIN_DATE;
+      EndDate            = END_DATE;
+      BookingFee         = BOOKING_FEE;
+      TotalPrice         = TOTAL_PRICE;
+      CurrencyCode       = CURRENCY_CODE;
+      Description        = DESCRIPTION;
+      OverallStatus      = OVERALL_STATUS;
+      Attachment         = ATTACHMENT;
+      MimeType           = MIME_TYPE;
+      FileName           = FILE_NAME;
+      CreatedBy          = CREATED_BY;
+      CreatedAt          = CREATED_AT;
+      LocalLastChangedBy = LOCAL_LAST_CHANGED_BY;
+      LocalLastChangedAt = LOCAL_LAST_CHANGED_AT;
+      LastChangedAt      = LAST_CHANGED_AT;
+    }
+
+
+// // Instance function with parameter and result
+//function //(authorization:none)
+//      GetDiscountedPrice
+//      parameter ZABS_ENTITY_LIVE_DEMO
+//      result [1] $self; //==> this returns same entity type instance
+//
+//
+//     function (authorization:none)
+//      GetDiscountedPrice2
+//      parameter ZABS_ENTITY_LIVE_DEMO
+//     result [1] ZI_ABSTRACT_NO_SELF  ; //this retuns instance of ZI_ABSTRACT_NO_SELF
+
+}

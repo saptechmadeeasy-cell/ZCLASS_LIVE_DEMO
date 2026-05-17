@@ -1,0 +1,57 @@
+managed implementation in class zbp_i_travel_al unique;
+strict ( 2 );
+with draft;
+define behavior for ZR_Travel_AL alias Travel
+persistent table ztravel_al
+draft table ztravel_ald
+lock master
+total etag lastchangedat
+authorization master ( global , instance  )
+etag master locallastchangedat  // Added for V4 consistency
+{
+  create;
+  update;
+  delete;
+
+  draft action Edit;
+  draft action Activate;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare { }
+  // Must include 'with draft' for deep creates
+
+  association _Booking { create; with draft; }
+
+  field ( readonly ) traveluuid, lastchangedat, locallastchangedat;
+
+  field ( numbering : managed ) traveluuid;
+  // Explicit mapping is safer than 'corresponding' for EML short syntax
+  mapping for ztravel_al {
+    traveluuid           = travel_uuid;
+    travelid             = travel_id;
+    description           = description; // <--- Explicitly add this!
+//    overall_status        = overall_status;
+    locallastchangedat = local_last_changed_at;
+    lastchangedat       = last_changed_at;
+  }
+}
+define behavior for ZI_Booking_Al alias Booking
+persistent table zbooking_al
+draft table zbooking_ald
+lock dependent by _Travel
+authorization dependent by _Travel
+etag master locallastchangedat // Added for Child ETag
+{
+  update;
+  delete;
+  association _Travel { with draft; }
+  field ( readonly ) parentuuid, bookinguuid, locallastchangedat;
+  field ( numbering : managed ) bookinguuid;
+  mapping for zbooking_al {
+    bookinguuid          = booking_uuid;
+    parentuuid           = parent_uuid;
+    bookingid            = booking_id; // <--- Explicitly add this!
+    locallastchangedat = local_last_changed_at;
+    CustomerId = customer_id;
+  }
+  }

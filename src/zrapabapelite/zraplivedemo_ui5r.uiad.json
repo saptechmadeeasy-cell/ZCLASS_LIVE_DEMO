@@ -1,0 +1,35 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application description",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "Title - rap abap live demo"
+  },
+  "ui5AppDetails": {
+    "appId": "appnslive.modulenamerapabaplive"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_F2C3E6194AB9F6E026E79A72CB4A70B9E7B0DE4C_TM",
+    "semanticObject": "ZRAPABAPLIVEDEMO001Y",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_F2C3E6194AB9F6E026E79A72CB4A70B9E7B0DE4C_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "Title - rap abap live demo",
+        "subtitle": "subtitle"
+      }
+    }
+  ]
+}

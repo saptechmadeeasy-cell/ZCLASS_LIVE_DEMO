@@ -1,0 +1,4 @@
+@EndUserText.label: 'Read only for Annoation'
+define service ZUI_TRAVEL_DM {
+  expose ZC_TRAVEL_DM;
+}

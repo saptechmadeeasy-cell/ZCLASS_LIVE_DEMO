@@ -1,0 +1,70 @@
+unmanaged implementation in class zbp_i_travel_um_al unique;
+strict ( 2 );
+with draft;
+define behavior for ZI_TRAVEL_UM_AL alias travel_uml
+//late numbering
+lock master total etag last_changed_at //NEED TO WRITE THE CODE
+draft table ztravel_um_ald
+authorization master ( instance )
+etag master local_last_changed_at //node level managed + unmanaged
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( numbering : managed, readonly ) travel_uuid;
+  association _Booking { create; with draft; }
+
+  draft determine action Prepare;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+
+  determination formatDescription on modify { field travel_id; }
+  side effects
+  {
+    field travel_id affects field description;
+  }
+}
+
+define behavior for ZI_BOOKING_UM_AL //alias <alias_name>
+draft table zbooling_um_ald
+lock dependent by _Travel
+authorization dependent by _Travel
+etag master local_last_changed_at
+{
+  update;
+  delete;
+  field ( readonly, numbering : managed ) booking_uuid;
+  field ( readonly ) parent_uuid;
+  association _Travel { with draft; }
+  association _Booksuppl { create; with draft; }
+}
+
+
+define behavior for ZI_BOOKSUPPL_UM_AL //alias <alias_name>
+draft table ZBOOKSUPL_UM_ALD
+lock dependent by _Travel
+authorization dependent by _Travel
+etag master LocalLastChangedAt
+{
+  update;
+  delete;
+  field ( readonly, numbering : managed ) BooksupplUuid;
+  field ( readonly ) bookinguuid, traveluuid;
+  association _Travel { with draft; }
+  association _Booking { with draft; }
+
+  mapping for zbooksuppl_um_al
+    {
+      booksuppluuid      = booksuppl_uuid;
+      traveluuid         = travel_uuid;
+      bookinguuid        = booking_uuid;
+      supplementid       = supplement_id;
+      price              = price;
+      currencycode       = currency_code;
+      locallastchangedat = local_last_changed_at;
+    }
+
+
+}

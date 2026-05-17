@@ -1,0 +1,4 @@
+@EndUserText.label: 'ZUI_ZCLASS_LIVE_DEMO'
+define service ZUI_ZCLASS_LIVE_DEMO {
+  expose ZRO_TEXT_ELEMENT;
+}
